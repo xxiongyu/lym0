@@ -20,7 +20,7 @@ lista_comandos = ['jump','walk','turntothe','turntomy','drop','grab','letgo','no
 
 def RevisionCompletitud(list, index, qc, corchete):
     comprobar = list[index]
-    if qc < -1:
+    if qc < -1 or corchete < -1:
         return -1000
     elif qc == 0 and corchete ==1 :
         return 0
@@ -37,6 +37,9 @@ def RevisionCompletitud(list, index, qc, corchete):
         elif comprobar == '}' and corchete>1:
             RevisionCompletitud(list, index+1, qc, corchete-1)
         
+        elif comprobar == ')' and qc==1:
+            RevisionCompletitud(list, index+1, qc-1, corchete)
+
         elif comprobar == '}' and qc==1:
             RevisionCompletitud(list, index, qc, corchete-1)
 
