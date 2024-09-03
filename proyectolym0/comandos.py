@@ -1,4 +1,4 @@
-#archivo = input('ingrese el arhivo: ')
+    #archivo = input('ingrese el arhivo: ')
 archivo = input('ingrese el arhivo: ')
 texto = open(archivo,"r",encoding="utf-8") 
 text = texto.read()
@@ -18,23 +18,27 @@ list_cardinales =['north','south','west','east']
 list_commansTurn = ['left','right',' back']  
 lista_comandos = ['jump','walk','turntothe','turntomy','drop','grab','letgo','nop','pick','pop','move','saveexe']
 
-def RevisionCompletitud(list, index, qc, Findex):
+def RevisionCompletitud(list, index, qc, corchete):
+    comprobar = list[index]
     if qc < -1:
         return -1000
-    elif qc == 0:
-        return Findex
+    elif qc == 0 and corchete ==1 :
+        return 0
     else:
-        if list[index]== '(':
-            RevisionCompletitud(list, index+1, qc+1, Findex)
-        elif list[index] == 'defun':
-            RevisionCompletitud(list, index+1, -10, Findex)
-        elif list[index] == ')' and qc>1:
-            RevisionCompletitud(list, index+1, qc-1, Findex)
-        elif list[index] != '(' and list[index] != ')':
-            RevisionCompletitud(list, index+1, qc, Findex)
+        if comprobar== '(':
+            RevisionCompletitud(list, index+1, qc+1, corchete)
+        elif comprobar == ')' and qc>1:
+            RevisionCompletitud(list, index+1, qc-1, corchete)
+        elif comprobar != '(' and comprobar != ')' and comprobar != '{' and comprobar != '}':
+            RevisionCompletitud(list, index+1, qc, corchete)
+
+        elif comprobar== '{':
+            RevisionCompletitud(list, index+1, qc, corchete+1)
+        elif comprobar == '}' and corchete>1:
+            RevisionCompletitud(list, index+1, qc, corchete-1)
         
-        else:
-            RevisionCompletitud(list, index, qc-1, index)
+        elif comprobar == '}' and qc==1:
+            RevisionCompletitud(list, index, qc, corchete-1)
 
 for a in range(0,size):
     word = lista_word[a]
@@ -61,9 +65,9 @@ for a in range(0,size):
                     lista.append(lista_word[aa])
             dicc_privado[variable]=lista
             llavedefuncion = indesado+1
-            if lista_word[llavedefuncion] == '{}':
+            if lista_word[llavedefuncion] == '{':
                 indesadofuncion = lista_word.index('}',llavedefuncion)
-                coordenada_complititud = RevisionCompletitud(lista_word, llavedefuncion, 1, 0)
+                coordenada_complititud = RevisionCompletitud(lista_word, llavedefuncion, 1, 1)
                 v_publico = dicc_publico.keys()
                 v_privado = dicc_privado.get(variable)
                 if coordenada_complititud == -1000:
