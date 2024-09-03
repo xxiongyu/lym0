@@ -1,12 +1,18 @@
     #archivo = input('ingrese el arhivo: ')
-archivo = input('ingrese el arhivo: ')
-texto = open(archivo,"r",encoding="utf-8") 
-text = texto.read()
-def simple_tokenizer(text):
-    text = text.split()
-    text = text.lower()
-    return text
-lista_word = simple_tokenizer(text)
+# archivo = input('ingrese el arhivo: ')
+# texto = open(archivo,"r",encoding="utf-8") 
+# text = texto.read()
+# def simple_tokenizer(text):
+#     text = text.lower()
+#     text = text.split()
+
+#     return text
+# lista_word = simple_tokenizer(text)
+
+text = "NEW VAR rotate = 3 NEW MACRO foo (c , p ) { drop( c ) ; letgo ( p ) ; walk( rotat e ) ; }"
+text= text.lower()
+text= text.split()
+lista_word = text
 size = len(lista_word)
 dicc_publico = {}
 dicc_privado = {}  
@@ -27,7 +33,7 @@ def RevisionCompletitud(list, index, qc, corchete):
     else:
         if comprobar== '(':
             RevisionCompletitud(list, index+1, qc+1, corchete)
-        elif comprobar == ')' and qc>1:
+        elif comprobar == ')':
             RevisionCompletitud(list, index+1, qc-1, corchete)
         elif comprobar != '(' and comprobar != ')' and comprobar != '{' and comprobar != '}':
             RevisionCompletitud(list, index+1, qc, corchete)
@@ -37,8 +43,6 @@ def RevisionCompletitud(list, index, qc, corchete):
         elif comprobar == '}' and corchete>1:
             RevisionCompletitud(list, index+1, qc, corchete-1)
         
-        elif comprobar == ')' and qc==1:
-            RevisionCompletitud(list, index+1, qc-1, corchete)
 
         elif comprobar == '}' and qc==1:
             RevisionCompletitud(list, index, qc, corchete-1)
@@ -70,11 +74,10 @@ for a in range(0,size):
             llavedefuncion = indesado+1
             if lista_word[llavedefuncion] == '{':
                 indesadofuncion = lista_word.index('}',llavedefuncion)
-                coordenada_complititud = RevisionCompletitud(lista_word, llavedefuncion, 1, 1)
-                v_publico = dicc_publico.keys()
-                v_privado = dicc_privado.get(variable)
+                coordenada_complititud = RevisionCompletitud(lista_word, llavedefuncion+1, 0, 1)
+                print(coordenada_complititud)
                 if coordenada_complititud == -1000:
-                    print('False')
+                    verificacion+1
         
     if word == 'jump': 
                     b = a+1 
@@ -165,7 +168,8 @@ for a in range(0,size):
                         else:
                             verificacion+1
 if verificacion > 1:
-    print('False')   
+    print('False')
+  
     
         
 
