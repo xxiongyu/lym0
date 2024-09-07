@@ -151,7 +151,7 @@ for a in range(0,size):
                             verificacion+0
                         else:
                             verificacion+1            
-    if word == 'facing': 
+    if word == 'isfacing?': 
                         b = a+1 
                         indensado = lista_word.index(')',b) 
                         for aa in range(b+1,indensado): 
@@ -160,6 +160,24 @@ for a in range(0,size):
                             else:
                                 verificacion+1
 
+    if word == 'isblocked?':
+                        b = a+1   
+                        indensado= lista_word.index(')',b) 
+                        for j in range(b+1,indensado):
+                            if lista_word[j] in list_posicion:
+                                    verificacion+0
+                            else:
+                                    verificacion+1
+
+    if word == 'zero?':
+                        b = a+1
+                        indensado=lista_word.index(')',b)
+                        for j in range(b+1,indensado):
+                                if lista_word[j] in dicc_privado:
+                                        verificacion+0
+                                else:
+                                        verificacion+1         
+
     if  word == 'not': 
                         b = a+1 
                         condicion = lista_word[b] 
@@ -167,6 +185,88 @@ for a in range(0,size):
                             verificacion+0
                         else:
                             verificacion+1
+
+    if word == 'walk':
+                        b = a+1
+                        indensado=lista_word.index(')',b)
+                        for j in range(b+1,indensado):
+                                if (lista_word[j] in dicc_privado):
+                                      verificacion+0
+                                else:   
+                                      verificacion+1
+
+    if word == 'drop':
+                        b = a+1
+                        indensado=lista_word.index(')',b)
+                        for j in range(b+1,indensado):
+                                if (lista_word[j] in dicc_privado):
+                                      verificacion+0
+                                else:   
+                                      verificacion+1   
+
+    if word == 'grab':
+                        b = a+1
+                        indensado=lista_word.index(')',b)
+                        for j in range(b+1,indensado):
+                                if (lista_word[j] in dicc_privado):
+                                      verificacion+0
+                                else:   
+                                      verificacion+1    
+
+    if word == 'letgo':
+                        b = a+1
+                        indensado=lista_word.index(')',b)
+                        for j in range(b+1,indensado):
+                                if (lista_word[j] in dicc_privado):
+                                      verificacion+0
+                                else:   
+                                      verificacion+1
+    if word == 'pop':
+                        b = a+1
+                        indensado=lista_word.index(')',b)
+                        for j in range(b+1,indensado):
+                                if (lista_word[j] in dicc_privado):
+                                      verificacion+0
+                                else:   
+                                      verificacion+1       
+
+    if word == 'moves':
+                        b = a+1
+                        indensado=lista_word.index(')',b)
+                        for j in range(b+1,indensado):
+                                if (lista_word[j] in list_posicion):
+                                      verificacion+0
+                                else:   
+                                      verificacion+1      
+
+    if word == 'nop':
+                        b = a+1
+                        if lista_word[b]!= ')' or lista_word[b]!= '(' or not(lista_word[b] in dicc_privado):
+                                verificacion+0
+                        else:
+                                verificacion+1
+
+    if word == 'safeexe':
+                        b = a+1
+                        indensado=lista_word.index(')',b)
+                        for j in range(b+1,indensado):
+                                if (lista_word[j] in lista_comandos):
+                                      verificacion+0
+                                else:   
+                                      verificacion+1 
+
+    if word=='if':
+                b = a+1
+                indensado=lista_word.index(')',b)
+                for j in range(b+1,indensado):
+                        if (lista_word[j]=='isblocked?') or (lista_word[j]=='isfacing?')  or (lista_word[j]=='iszero?'):
+                                verificacion+0
+                        else:
+                                verificacion+1
+                if lista_word[indensado+1] == 'then':
+                        
+                                                                                                                     
+                                                   
 if verificacion > 1:
     print('False')
   
