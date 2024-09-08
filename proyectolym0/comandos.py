@@ -9,10 +9,11 @@
 #     return text
 # lista_word = simple_tokenizer(text)
 
-text = "NEW VAR rotate = 3 NEW MACRO foo (c , p ) { drop( c ) ; letgo ( p ) ; walk( rotat e ) ; }"
+text = "NEW VAR rotate = 3 NEW MACRO foo ( c , p ) { drop ( c ) ; letgo ( p ) ; walk ( rotat e ) ; }"
 text= text.lower()
 text= text.split()
 lista_word = text
+print(lista_word)
 size = len(lista_word)
 dicc_publico = {}
 dicc_privado = {}  
@@ -22,14 +23,20 @@ posiciones = ["x","y","v"]
 list_posicion = ['right','left','front','back'] 
 list_cardinales =['north','south','west','east'] 
 list_commansTurn = ['left','right',' back']  
-lista_comandos = ['jump','walk','turntothe','turntomy','drop','grab','letgo','nop','pick','pop','move','saveexe']
+lista_comandos = ['jump','walk','turntothe','turntomy','drop','grab','letgo','nop','pick','pop','moves','safeexe']
+lista_condi = ['isfacing','isblocked','zero','not']
+lista_estruc=['if','do','repeat']
+
+
+
 
 def RevisionCompletitud(list, index, qc, corchete):
     comprobar = list[index]
     if qc < -1 or corchete < -1:
         return -1000
-    elif qc == 0 and corchete ==1 :
-        return 0
+    elif qc == 0 and corchete ==0 :
+        print(index)
+        return index
     else:
         if comprobar== '(':
             RevisionCompletitud(list, index+1, qc+1, corchete)
@@ -44,7 +51,7 @@ def RevisionCompletitud(list, index, qc, corchete):
             RevisionCompletitud(list, index+1, qc, corchete-1)
         
 
-        elif comprobar == '}' and qc==1:
+        elif comprobar == '}' and corchete==1:
             RevisionCompletitud(list, index, qc, corchete-1)
 
 def RevisionDefinicion (lista,a)  :
@@ -73,7 +80,6 @@ def RevisionDefinicion (lista,a)  :
                 dicc_privado[variable]=listaParam
                 llavedefuncion = indensado+1
                 if lista[llavedefuncion] == '{':
-                    indesadofuncion = lista.index('}',llavedefuncion)
                     coordenada_complititud = RevisionCompletitud(lista_word, llavedefuncion+1, 0, 1)
                     print(coordenada_complititud)
                     if coordenada_complititud == -1000:
@@ -152,7 +158,7 @@ def RevisionComando(lista,a)->int:
             
         if lista[a] == 'walk':
                         b = a+1
-                        indensado=lista[a].index(')',b)
+                        indensado=lista.index(')',b)
                         for j in range(b+1,indensado):
                                 if (lista[j] in dicc_publico):
                                       verificacion+0
@@ -163,7 +169,7 @@ def RevisionComando(lista,a)->int:
 
         if lista[a] == 'drop':
                         b = a+1
-                        indensado=lista[a].index(')',b)
+                        indensado=lista.index(')',b)
                         for j in range(b+1,indensado):
                                 if (lista[j] in dicc_publico):
                                       verificacion+0
@@ -223,6 +229,7 @@ def RevisionComando(lista,a)->int:
                                 else:   
                                       verificacion+1 
                                       return a+size
+
 
 def RevisionCondicion(lista,a)->int:
         global verificacion
@@ -286,7 +293,7 @@ def RevisionEstructuraControl (lista,a)->int:
                 else:
                        verificacion+1
                        return a+size
-                
+
         elif lista[a]== "do":
                 b=a+1
                 condicion= RevisionCondicion(lista[b:],b)
@@ -303,11 +310,21 @@ def RevisionEstructuraControl (lista,a)->int:
                        verificacion+1
                        return a+size
    
-                                                                                                                     
+for aa in range(0,size):
+    if lista_word[aa] in lista_comandos:
+           RevisionComando(lista_word,aa)
+    elif lista_word[aa] in lista_condi:
+           RevisionCondicion(lista_word,aa)
+    elif lista_word[aa] in lista_estruc:
+           RevisionEstructuraControl(lista_word,aa)
+    elif lista_word[aa] == 'new':
+           RevisionDefinicion(lista_word,aa)
                                                    
 
 if verificacion > 1:
     print('False')
+
+
   
     
  
