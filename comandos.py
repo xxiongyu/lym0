@@ -18,10 +18,8 @@ dicc_publico = {}
 dicc_privado = {}  
 verificacion = 0 
 list_rango = str(list(range(1,100))) 
-posiciones = ["x","y","v"]
-list_posicion = ['right','left','front','back'] 
+posiciones = ['right','left','front','back'] 
 list_cardinales =['north','south','west','east'] 
-list_commansTurn = ['left','right',' back']  
 lista_comandos = ['jump','walk','turntothe','turntomy','drop','grab','letgo','nop','pick','pop','move','saveexe']
 
 def RevisionCompletitud(list, index, qc, corchete):
