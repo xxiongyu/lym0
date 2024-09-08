@@ -229,7 +229,8 @@ def RevisionComando(lista,a)->int:
                                 else:   
                                       verificacion+1 
                                       return a+size
-
+        else:
+               return a
 
 def RevisionCondicion(lista,a)->int:
         global verificacion
@@ -275,16 +276,18 @@ def RevisionCondicion(lista,a)->int:
                         else:
                             verificacion+1   
                             return a+size
-
+        else:
+               return a
+        
 def RevisionEstructuraControl (lista,a)->int:
         global verificacion
         if lista[a] == 'if':
                 b = a+1
                 condicion= RevisionCondicion(lista[b:],b)
-                if not (condicion>size) and lista[condicion]=="then":
+                if not (condicion>size) and (condicion!=b) and lista[condicion]=="then":
                      #aplicar revision completitud
                     then=RevisionComando(lista[condicion:],condicion)
-                    if not (then>size) and lista[then]=="else":
+                    if not (then>size) and (condicion!=b) and lista[then]=="else":
                         RevisionComando(lista[then],then)
                     else:
                            verificacion+1
@@ -294,37 +297,49 @@ def RevisionEstructuraControl (lista,a)->int:
                        verificacion+1
                        return a+size
 
-        elif lista[a]== "do":
+        if lista[a]== "do":
                 b=a+1
                 condicion= RevisionCondicion(lista[b:],b)
-                if not (condicion>size) :
+                if not (condicion>size) and (condicion!=b) :
                        RevisionComando(lista[condicion],condicion)
                 else:
                        verificacion+1
                        return a+size
-        elif lista[a]=="repeat":
+        if lista[a]=="repeat":
                 b=a+1
                 if (b in dicc_publico) and (lista[b+1]=="times"):
                       RevisionComando(lista[b+1],b+1)
                 else:
                        verificacion+1
                        return a+size
-   
-for aa in range(0,size):
-    if lista_word[aa] in lista_comandos:
-           RevisionComando(lista_word,aa)
+        else:
+               return a
+aa = 0   
+while ( aa < size) and (verificacion == 0):
+    
+    if lista_word[aa] :
+           aa=RevisionComando(lista_word,aa)
     elif lista_word[aa] in lista_condi:
-           RevisionCondicion(lista_word,aa)
+           aa=RevisionCondicion(lista_word,aa)
     elif lista_word[aa] in lista_estruc:
-           RevisionEstructuraControl(lista_word,aa)
+           aa=RevisionEstructuraControl(lista_word,aa)
     elif lista_word[aa] == 'new':
-           RevisionDefinicion(lista_word,aa)
+           aa=RevisionDefinicion(lista_word,aa)
                                                    
 
 if verificacion > 1:
     print('False')
 
+#
+#archivo = input('ingrese el arhivo: ')
+# texto = open(archivo,"r",encoding="utf-8") 
+# text = texto.read()
+# def simple_tokenizer(text):
+#     text = text.lower()
+#     text = text.split()
 
+#     return text
+# lista_word = simple_tokenizer(text)
   
     
  
