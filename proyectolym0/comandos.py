@@ -54,7 +54,7 @@ def RevisionCompletitud(list, index, qc, corchete):
         elif comprobar == '}' and corchete==1:
             RevisionCompletitud(list, index, qc, corchete-1)
 
-def RevisionDefinicion (lista,a)  :
+def RevisionDefinicion (lista,a)->int  :
         global verificacion    
         if lista[a] == 'new':
             tipo = lista[a+1]
@@ -67,6 +67,7 @@ def RevisionDefinicion (lista,a)  :
                 igual = lista_word[d]
                 if igual == '=' and esEntero(valor):
                     dicc_publico[variable] = valor
+                    return a+5
 
             elif tipo=="macro":
                 b = a+2
@@ -84,6 +85,9 @@ def RevisionDefinicion (lista,a)  :
                     print(coordenada_complititud)
                     if coordenada_complititud == -1000:
                         verificacion+1    
+                        return a+size
+                    else:
+                           return a+indensado
                              
 def esEntero(valor):
     try:
@@ -319,11 +323,11 @@ while ( aa < size) and (verificacion == 0):
     
     if lista_word[aa] :
            aa=RevisionComando(lista_word,aa)
-    elif lista_word[aa] in lista_condi:
+    if lista_word[aa] in lista_condi:
            aa=RevisionCondicion(lista_word,aa)
-    elif lista_word[aa] in lista_estruc:
+    if lista_word[aa] in lista_estruc:
            aa=RevisionEstructuraControl(lista_word,aa)
-    elif lista_word[aa] == 'new':
+    if lista_word[aa] == 'new':
            aa=RevisionDefinicion(lista_word,aa)
                                                    
 
