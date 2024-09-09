@@ -1,15 +1,7 @@
-    #archivo = input('ingrese el arhivo: ')
-# archivo = input('ingrese el arhivo: ')
-# texto = open(archivo,"r",encoding="utf-8") 
-# text = texto.read()
-# def simple_tokenizer(text):
-#     text = text.lower()
-#     text = text.split()
-
-#     return text
-# lista_word = simple_tokenizer(text)
-
-text = "NEW VAR rotate = 3 NEW MACRO foo ( c , p ) { drop ( c ) ; letgo ( p ) ; walk ( rotat e ) ; }"
+archivo = input('ingrese el arhivo: ')
+texto = open(archivo,"r",encoding="utf-8") 
+text = texto.read()
+# text = "NEW VAR rotate = 3 NEW MACRO foo ( c , p ) { drop ( c ) ; letgo ( p ) ; walk ( rotat e ) ; }"
 text= text.lower()
 text= text.split()
 lista_word = text
@@ -34,25 +26,25 @@ def RevisionCompletitud(list, index, qc, corchete):
     comprobar = list[index]
     if qc < -1 or corchete < -1:
         return -1000
-    elif qc == 0 and corchete ==0 :
-        print(index)
-        return index
+
     else:
         if comprobar== '(':
-            RevisionCompletitud(list, index+1, qc+1, corchete)
-        elif comprobar == ')':
-            RevisionCompletitud(list, index+1, qc-1, corchete)
-        elif comprobar != '(' and comprobar != ')' and comprobar != '{' and comprobar != '}':
-            RevisionCompletitud(list, index+1, qc, corchete)
+            return RevisionCompletitud(list, index+1, qc+1, corchete)
+        if comprobar == ')':
+            return RevisionCompletitud(list, index+1, qc-1, corchete)
+        if comprobar != '(' and comprobar != ')' and comprobar != '{' and comprobar != '}':
+            return RevisionCompletitud(list, index+1, qc, corchete)
 
-        elif comprobar== '{':
-            RevisionCompletitud(list, index+1, qc, corchete+1)
-        elif comprobar == '}' and corchete>1:
-            RevisionCompletitud(list, index+1, qc, corchete-1)
+        if comprobar== '{':
+            return RevisionCompletitud(list, index+1, qc, corchete+1)
+        if comprobar == '}' and corchete>1:
+            return RevisionCompletitud(list, index+1, qc, corchete-1)
         
 
-        elif comprobar == '}' and corchete==1:
-            RevisionCompletitud(list, index, qc, corchete-1)
+        if comprobar == '}' and corchete==1:
+            return index
+        
+
 
 def RevisionDefinicion (lista,a)->int  :
         global verificacion    
@@ -63,13 +55,15 @@ def RevisionDefinicion (lista,a)->int  :
                 c = a+3
                 d = a+4
                 variable = lista_word[b]
-                valor = lista_word[c]
-                igual = lista_word[d]
+                valor = lista_word[d]
+                igual = lista_word[c]
                 if igual == '=' and esEntero(valor):
                     dicc_publico[variable] = valor
                     return a+5
+                else:
+                    return a+size
 
-            elif tipo=="macro":
+            if tipo=="macro":
                 b = a+2
                 c = a+3
                 listaParam = []
@@ -82,12 +76,23 @@ def RevisionDefinicion (lista,a)->int  :
                 llavedefuncion = indensado+1
                 if lista[llavedefuncion] == '{':
                     coordenada_complititud = RevisionCompletitud(lista_word, llavedefuncion+1, 0, 1)
-                    print(coordenada_complititud)
                     if coordenada_complititud == -1000:
                         verificacion+1    
                         return a+size
                     else:
-                           return a+indensado
+                           for vericidad in range(llavedefuncion, coordenada_complititud):
+                                    if lista_word[vericidad] :
+                                        RevisionComando(lista_word,vericidad)
+                                    if lista_word[aa] in lista_condi:
+                                        RevisionCondicion(lista_word,vericidad)
+                                    if lista_word[aa] in lista_estruc:
+                                        RevisionEstructuraControl(lista_word,vericidad)
+                                    if lista_word[aa] == 'new':
+                                        RevisionDefinicion(lista_word,vericidad)
+
+                           return a+coordenada_complititud
+                    
+
                              
 def esEntero(valor):
     try:
@@ -290,9 +295,27 @@ def RevisionEstructuraControl (lista,a)->int:
                 condicion= RevisionCondicion(lista[b:],b)
                 if not (condicion>size) and (condicion!=b) and lista[condicion]=="then":
                      #aplicar revision completitud
+                    if_index = lista_word.index('{', a)
+                    coordenadaCompletitud = RevisionCompletitud(lista_word, if_index+1,0,1)
                     then=RevisionComando(lista[condicion:],condicion)
                     if not (then>size) and (condicion!=b) and lista[then]=="else":
                         RevisionComando(lista[then],then)
+                    
+                    elif coordenadaCompletitud == -1000:
+                           verificacion+1
+                           return a+size
+                    
+                    elif coordenadaCompletitud != -1000:
+                           for vericidad in range(if_index, coordenadaCompletitud):
+                                    if lista_word[vericidad] :
+                                        RevisionComando(lista_word,vericidad)
+                                    if lista_word[aa] in lista_condi:
+                                        RevisionCondicion(lista_word,vericidad)
+                                    if lista_word[aa] in lista_estruc:
+                                        RevisionEstructuraControl(lista_word,vericidad)
+                                    if lista_word[aa] == 'new':
+                                        RevisionDefinicion(lista_word,vericidad)
+                    
                     else:
                            verificacion+1
                            return a+size
@@ -332,7 +355,10 @@ while ( aa < size) and (verificacion == 0):
                                                    
 
 if verificacion > 1:
-    print('False')
+    print('esta mal')
+
+elif verificacion == 0:
+    print('esta bien')
 
 #
 #archivo = input('ingrese el arhivo: ')
