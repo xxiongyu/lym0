@@ -238,6 +238,9 @@ def RevisionComando(lista,a)->int:
                                 else:   
                                       verificacion+1 
                                       return a+size
+                                
+        if lista[a] in dicc_privado:
+               return a+1+(dicc_privado[lista[a]].size())                        
         else:
                return a
 
@@ -344,11 +347,11 @@ def RevisionEstructuraControl (lista,a)->int:
 aa = 0   
 while ( aa < size) and (verificacion == 0):
     
-    if lista_word[aa] :
+    if lista_word[aa] == "exec" :
            aa=RevisionComando(lista_word,aa)
     if lista_word[aa] in lista_condi:
            aa=RevisionCondicion(lista_word,aa)
-    if lista_word[aa] in lista_estruc:
+    if lista_word[aa] in lista_estruc and "exec":
            aa=RevisionEstructuraControl(lista_word,aa)
     if lista_word[aa] == 'new':
            aa=RevisionDefinicion(lista_word,aa)

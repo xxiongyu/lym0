@@ -105,7 +105,7 @@ def RevisionComando(lista,a)->int:
                         if (lista[aa] in list_rango or lista[aa] in posiciones) : 
                             verificacion+0
                             add+=(aa+1)
-                        elif (lista[aa] in list_rango or lista[aa] in posiciones) and lista[aa+1] == ',' and lista[aa+2] in list_posicion: 
+                        elif (lista[aa] in list_rango or lista[aa] in posiciones) and lista[aa+1] == ',' and lista[aa+2] in posiciones: 
                             verificacion+0
                             add+=(aa+3)
                         elif (lista[aa] in list_rango or lista[aa] in posiciones) and lista[aa+1] == ',' and lista[aa+2] in list_cardinales: 
